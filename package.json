@@ -28,7 +28,10 @@
     "faker": "4.1.0",
     "fuse.js": "^6.4.6",
     "html-to-text": "^7.1.1",
+    "mathjs": "^9.5.0",
     "normalize-url": "^6.1.0",
+    "number-to-letter": "^1.0.1",
+    "postcss": "^8.3.8",
     "postgres-date": "^2.0.1",
     "react": "^16.13.1",
     "react-chartjs-2": "2.9.0",
@@ -49,7 +52,8 @@
     "react-table": "^7.7.0",
     "react-transition-group": "4.4.1",
     "redux": "^4.1.0",
-    "romanjs": "^2.0.1"
+    "romanjs": "^2.0.1",
+    "xlsx": "^0.17.2"
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^3.0.0",
