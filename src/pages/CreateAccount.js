@@ -10,7 +10,10 @@ import { FulfillingBouncingCircleSpinner } from "react-epic-spinners";
 
 import ImageLight from "../assets/img/create-account-office.jpeg";
 import ImageDark from "../assets/img/create-account-office-dark.jpeg";
-import { clearCreateProfileStatus, createNewProfile } from "../app/profilesSlice";
+import {
+  clearCreateProfileStatus,
+  createNewProfile,
+} from "../app/profilesSlice";
 
 function CreateAccount() {
   const dispatch = useDispatch();
