@@ -1,168 +1,174 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
-import { supabase } from '../supabase'
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { supabase } from "../supabase";
 
 const initialState = {
   profileList: [],
-  profileListStatus: 'idle',
+  profileListStatus: "idle",
   profileListError: null,
   profileById: [],
-  profileByIdStatus: 'idle',
+  profileByIdStatus: "idle",
   profileByIdError: null,
   createProfile: [],
-  createProfileStatus: 'idle',
+  createProfileStatus: "idle",
   createProfileError: null,
   profileDelete: [],
-  profileDeleteStatus: 'idle',
+  profileDeleteStatus: "idle",
   profileDeleteError: null,
   profileUpdate: [],
-  profileUpdateStatus: 'idle',
+  profileUpdateStatus: "idle",
   profileUpdateError: null,
-}
+};
 
 export const fetchProfile = createAsyncThunk(
-  'profiles/fetchProfile',
+  "profiles/fetchProfile",
   async () => {
-    const response = await supabase.from('profiles').select()
-    return response
-  },
-)
+    const response = await supabase.from("profiles").select();
+    return response;
+  }
+);
 
 export const fetchProfileById = createAsyncThunk(
-  'profiles/fetchProfileById',
+  "profiles/fetchProfileById",
   async (id) => {
-    const response = await supabase.from('profiles').select('*').eq('id', id)
-    return response
-  },
-)
+    const response = await supabase.from("profiles").select("*").eq("id", id);
+    return response;
+  }
+);
 
 export const createNewProfile = createAsyncThunk(
-  'profiles/createNewProfile',
+  "profiles/createNewProfile",
   async (data) => {
     const { user, session, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
-    })
-    console.log(user)
-    data.id = user.id
-    const response = await supabase.from('profiles').insert([data])
+    });
+    console.log(user);
+    data.id = user.id;
+    const response = await supabase.from("profiles").insert([data]);
     if (response.error) {
-      alert(response.error.message)
+      alert(response.error.message);
     }
-    return response
-  },
-)
+    return response;
+  }
+);
 
 export const deleteProfile = createAsyncThunk(
-  'profiles/deleteProfile',
+  "profiles/deleteProfile",
   async (id) => {
-    await supabase.from('profiles').delete().match({ id: id })
-    return id
-  },
-)
+    await supabase.from("profiles").delete().match({ id: id });
+    return id;
+  }
+);
 
 export const updateProfile = createAsyncThunk(
-  'profiles/updateProfile',
+  "profiles/updateProfile",
   async (updatedData) => {
     const { data, error } = await supabase
-      .from('profiles')
+      .from("profiles")
       .update({
-        address: updatedData.address,
-        email: updatedData.email,
         name: updatedData.name,
-        phone: updatedData.phone,
-        pic_name: updatedData.pic_name,
+        gender: updatedData.gender,
+        identity: updatedData.identity,
+        birth_date: updatedData.birth_date,
+        address: updatedData.address,
+        photo_url: updatedData.photo_url,
+        role: updatedData.role,
       })
-      .eq('id', updatedData.id)
+      .eq("id", updatedData.id);
     // if (error) return error
-    return data
-  },
-)
+    return data;
+  }
+);
 
 const profilesSlice = createSlice({
-  name: 'profiles',
+  name: "profiles",
   initialState,
   reducers: {
     clearProfileByIdData: (state) => {
-      state.profileById = []
+      state.profileById = [];
     },
     clearProfileByIdStatus: (state) => {
-      state.profileByIdStatus = 'idle'
+      state.profileByIdStatus = "idle";
     },
     clearProfileDeleteStatus: (state) => {
-      state.profileDeleteStatus = 'idle'
+      state.profileDeleteStatus = "idle";
     },
     clearCreateProfileStatus: (state) => {
-      state.createProfileStatus = 'idle'
+      state.createProfileStatus = "idle";
+    },
+    clearProfileUpdateStatus: (state) => {
+      state.profileUpdateStatus = "idle";
     },
   },
   extraReducers: {
     [fetchProfile.pending]: (state) => {
-      state.profileListStatus = 'loading'
+      state.profileListStatus = "loading";
     },
     [fetchProfile.fulfilled]: (state, action) => {
-      state.profileListStatus = 'succeeded'
-      state.profileList = state.profileList.concat(action.payload.data)
+      state.profileListStatus = "succeeded";
+      state.profileList = state.profileList.concat(action.payload.data);
     },
     [fetchProfile.rejected]: (state, action) => {
-      state.profileListStatus = 'failed'
-      state.profileListError = action.error.message
+      state.profileListStatus = "failed";
+      state.profileListError = action.error.message;
     },
     [fetchProfileById.pending]: (state) => {
-      state.profileByIdStatus = 'loading'
+      state.profileByIdStatus = "loading";
     },
     [fetchProfileById.fulfilled]: (state, action) => {
-      state.profileByIdStatus = 'succeeded'
-      state.profileById = action.payload.data[0]
+      state.profileByIdStatus = "succeeded";
+      state.profileById = action.payload.data[0];
     },
     [fetchProfileById.rejected]: (state, action) => {
-      state.profileByIdStatus = 'failed'
-      state.profileByIdError = action.error.message
+      state.profileByIdStatus = "failed";
+      state.profileByIdError = action.error.message;
     },
     [createNewProfile.pending]: (state) => {
-      state.createProfileStatus = 'loading'
+      state.createProfileStatus = "loading";
     },
     [createNewProfile.fulfilled]: (state, action) => {
-      state.createProfileStatus = 'succeeded'
-      state.profileList = state.profileList.concat(action.payload.data[0])
+      state.createProfileStatus = "succeeded";
+      state.profileList = state.profileList.concat(action.payload.data[0]);
     },
     [createNewProfile.rejected]: (state, action) => {
-      state.createProfileStatus = 'failed'
-      state.createProfileError = action.error.message
+      state.createProfileStatus = "failed";
+      state.createProfileError = action.error.message;
     },
     [deleteProfile.pending]: (state) => {
-      state.profileDeleteStatus = 'loading'
+      state.profileDeleteStatus = "loading";
     },
     [deleteProfile.fulfilled]: (state, action) => {
-      state.profileDeleteStatus = 'succeeded'
-      state.profileDelete = action.payload.data
-      const array = current(state.profileList)
+      state.profileDeleteStatus = "succeeded";
+      state.profileDelete = action.payload.data;
+      const array = current(state.profileList);
       // eslint-disable-next-line eqeqeq
-      const temp = array.filter((element) => element.id != action.payload)
-      state.profileList = temp
+      const temp = array.filter((element) => element.id != action.payload);
+      state.profileList = temp;
     },
     [deleteProfile.rejected]: (state, action) => {
-      state.profileDeleteStatus = 'failed'
-      state.profileDeleteError = action.error.message
+      state.profileDeleteStatus = "failed";
+      state.profileDeleteError = action.error.message;
     },
     [updateProfile.pending]: (state) => {
-      state.profileUpdateStatus = 'loading'
+      state.profileUpdateStatus = "loading";
     },
     [updateProfile.fulfilled]: (state, action) => {
-      state.profileUpdateStatus = 'succeeded'
-      state.profileUpdate = action.payload.data
+      state.profileUpdateStatus = "succeeded";
+      state.profileUpdate = action.payload.data;
     },
     [updateProfile.rejected]: (state, action) => {
-      state.profileUpdateStatus = 'failed'
-      state.profileUpdateError = action.error.message
+      state.profileUpdateStatus = "failed";
+      state.profileUpdateError = action.error.message;
     },
   },
-})
+});
 
 export const {
   clearProfileByIdData,
   clearProfileByIdStatus,
   clearProfileDeleteStatus,
   clearCreateProfileStatus,
-} = profilesSlice.actions
+  clearProfileUpdateStatus,
+} = profilesSlice.actions;
 
-export default profilesSlice.reducer
+export default profilesSlice.reducer;

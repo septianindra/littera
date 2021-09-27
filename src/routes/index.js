@@ -1,110 +1,111 @@
-import { lazy } from 'react'
+import { lazy } from "react";
 
-const Forms = lazy(() => import('../pages/Forms'))
-const Exam = lazy(() => import('../pages/Exam'))
-const Organizations = lazy(() => import('../pages/Organizations'))
-const QBank = lazy(() => import('../pages/QBank'))
-const Report = lazy(() => import('../pages/Report'))
-const CreateSchedule = lazy(() => import('../pages/CreateSchedules.js'))
-const CreateOrganization = lazy(() => import('../pages/CreateOrganizations'))
-const CreateParticipant = lazy(() => import('../pages/CreateParticipants.js'))
-const CreateSection = lazy(() => import('../pages/CreateSections'))
-const CreateQuestion = lazy(() => import('../pages/CreateQuestions'))
-const Profiles = lazy(() => import('../pages/Profiles'))
-const CreateProfiles = lazy(() => import('../pages/CreateProfiles'))
-const EditQuestions = lazy(() => import('../pages/EditQuestions'))
+const Forms = lazy(() => import("../pages/Forms"));
+const Exam = lazy(() => import("../pages/Exam"));
+const Organizations = lazy(() => import("../pages/Organizations"));
+const QBank = lazy(() => import("../pages/QBank"));
+const Report = lazy(() => import("../pages/Report"));
+const CreateSchedule = lazy(() => import("../pages/CreateSchedules.js"));
+const CreateOrganization = lazy(() => import("../pages/CreateOrganizations"));
+const CreateParticipant = lazy(() => import("../pages/CreateParticipants.js"));
+const CreateSection = lazy(() => import("../pages/CreateSections"));
+const CreateQuestion = lazy(() => import("../pages/CreateQuestions"));
+const Profiles = lazy(() => import("../pages/Profiles"));
+const EditProfile = lazy(() => import("../pages/EditProfile"));
+const CreateProfiles = lazy(() => import("../pages/CreateProfiles"));
+const EditQuestions = lazy(() => import("../pages/EditQuestions"));
 
 const routes = [
   {
-    path: '/exam',
+    path: "/exam",
     component: Exam,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin", "proctor"],
   },
   {
-    path: '/exam/create-schedule',
+    path: "/exam/create-schedule",
     component: CreateSchedule,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/exam/edit-schedule/:id',
+    path: "/exam/edit-schedule/:id",
     component: CreateSchedule,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/organizations',
+    path: "/organizations",
     component: Organizations,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/organizations/create-organization',
+    path: "/organizations/create-organization",
     component: CreateOrganization,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/organizations/edit-organization/:id',
+    path: "/organizations/edit-organization/:id",
     component: CreateOrganization,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/organizations/create-participant',
+    path: "/organizations/create-participant",
     component: CreateParticipant,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/organizations/edit-participant/:id',
+    path: "/organizations/edit-participant/:id",
     component: CreateParticipant,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/qbank',
+    path: "/qbank",
     component: QBank,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/qbank/create-section',
+    path: "/qbank/create-section",
     component: CreateSection,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/qbank/edit-section/:id',
+    path: "/qbank/edit-section/:id",
     component: CreateSection,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/qbank/create-question',
+    path: "/qbank/create-question",
     component: CreateQuestion,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/qbank/edit-question/:id',
+    path: "/qbank/edit-question/:id",
     component: EditQuestions,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/report',
+    path: "/report",
     component: Report,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/profiles',
+    path: "/profiles",
     component: Profiles,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/profiles/create-profile',
+    path: "/profiles/create-profile",
     component: CreateProfiles,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
   {
-    path: '/profiles/edit-profile',
-    component: CreateProfiles,
-    roles: ['supabase_admin', 'proctor'],
+    path: "/profiles/edit-profile/:id",
+    component: EditProfile,
+    roles: ["super_admin"],
   },
   {
-    path: '/forms',
+    path: "/forms",
     component: Forms,
-    roles: ['supabase_admin', 'proctor'],
+    roles: ["super_admin"],
   },
-]
+];
 
-export default routes
+export default routes;

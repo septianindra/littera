@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import PageTitle from '../components/Typography/PageTitle'
-import { Link } from 'react-router-dom'
-import InfoCard from '../components/Cards/InfoCard'
-import RoundIcon from '../components/RoundIcon'
-import { PeopleIcon } from '../icons'
+import React, { useEffect, useState } from "react";
+import PageTitle from "../components/Typography/PageTitle";
+import { Link } from "react-router-dom";
+import InfoCard from "../components/Cards/InfoCard";
+import RoundIcon from "../components/RoundIcon";
+import { PeopleIcon } from "../icons";
 
 import {
   Table,
@@ -16,59 +16,52 @@ import {
   Badge,
   Button,
   Pagination,
-} from '@windmill/react-ui'
-import { EditIcon, TrashIcon } from '../icons'
+} from "@windmill/react-ui";
+import { EditIcon, TrashIcon } from "../icons";
 
-import SectionTitle from '../components/Typography/SectionTitle'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteProfile, fetchProfile } from '../app/profilesSlice'
+import SectionTitle from "../components/Typography/SectionTitle";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProfile, fetchProfile } from "../app/profilesSlice";
 
 function Profiles() {
-  const dispatch = useDispatch()
-  const buttonPrf = (
-    <Button size="small" tag={Link} to="/app/profiles/create-profile">
-      + new profile
-    </Button>
-  )
-
-  const response = useSelector((state) => state.profiles.profileList)
+  const dispatch = useDispatch();
+  const response = useSelector((state) => state.profiles.profileList);
   const profileListStatus = useSelector(
-    (state) => state.profiles.profileListStatus,
-  )
+    (state) => state.profiles.profileListStatus
+  );
 
   useEffect(() => {
-    if (profileListStatus === 'idle') {
-      dispatch(fetchProfile())
+    if (profileListStatus === "idle") {
+      dispatch(fetchProfile());
     }
-  }, [profileListStatus, dispatch])
+  }, [profileListStatus, dispatch]);
 
-  const [pageTable, setPageTable] = useState(1)
-  const [dataTable, setDataTable] = useState([])
-  const resultsPerPage = 10
-  const totalResults = response.length
+  const [pageTable, setPageTable] = useState(1);
+  const [dataTable, setDataTable] = useState([]);
+  const resultsPerPage = 10;
+  const totalResults = response.length;
 
   function onPageChangeTable2(p) {
-    setPageTable(p)
+    setPageTable(p);
   }
 
   function removeProfile(id) {
-    dispatch(deleteProfile(id))
+    dispatch(deleteProfile(id));
   }
 
   useEffect(() => {
     setDataTable(
       response.slice(
         (pageTable - 1) * resultsPerPage,
-        pageTable * resultsPerPage,
-      ),
-    )
-  }, [response, pageTable])
+        pageTable * resultsPerPage
+      )
+    );
+  }, [response, pageTable]);
   return (
     <>
       <PageTitle>
         <div className="flex justify-between">
           <div>Profiles</div>
-          <div className="float-right">{buttonPrf}</div>
         </div>
       </PageTitle>
       <hr className="mb-4" />
@@ -77,6 +70,7 @@ function Profiles() {
         <Table>
           <TableHeader>
             <tr>
+              <TableCell>Email</TableCell>
               <TableCell>Display name</TableCell>
               <TableCell>Gender</TableCell>
               <TableCell>Identity</TableCell>
@@ -89,6 +83,16 @@ function Profiles() {
           <TableBody>
             {dataTable.map((data, i) => (
               <TableRow key={i}>
+                <TableCell>
+                  <div className="flex items-center text-sm">
+                    <div>
+                      <p className="font-semibold">{data.email}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        {data.password}
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center text-sm">
                     <div>
@@ -114,7 +118,13 @@ function Profiles() {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-4">
-                    <Button layout="link" size="icon" aria-label="Edit">
+                    <Button
+                      layout="link"
+                      tag={Link}
+                      to={`/app/profiles/edit-profile/${data.id}`}
+                      size="icon"
+                      aria-label="Edit"
+                    >
                       <EditIcon className="w-5 h-5" aria-hidden="true" />
                     </Button>
                     <Button
@@ -141,7 +151,7 @@ function Profiles() {
         </TableFooter>
       </TableContainer>
     </>
-  )
+  );
 }
 
-export default Profiles
+export default Profiles;

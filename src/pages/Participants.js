@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import PageTitle from '../components/Typography/PageTitle'
+import React, { useState, useEffect } from "react";
+import PageTitle from "../components/Typography/PageTitle";
 import {
   Table,
   TableHeader,
@@ -12,33 +12,29 @@ import {
   Avatar,
   Button,
   Pagination,
-} from '@windmill/react-ui'
-import { EditIcon, TrashIcon } from '../icons'
-
-import response from '../utils/demo/tableData'
-// make a copy of the data, for the second table
-const response2 = response.concat([])
+} from "@windmill/react-ui";
+import { EditIcon, TrashIcon } from "../icons";
 
 function Participants() {
-  const [pageTable2, setPageTable2] = useState(1)
+  const [pageTable2, setPageTable2] = useState(1);
 
-  const [dataTable2, setDataTable2] = useState([])
+  const [dataTable2, setDataTable2] = useState([]);
 
-  const resultsPerPage = 10
-  const totalResults = response.length
+  const resultsPerPage = 10;
+  const totalResults = response.length;
 
   function onPageChangeTable2(p) {
-    setPageTable2(p)
+    setPageTable2(p);
   }
 
   useEffect(() => {
     setDataTable2(
       response2.slice(
         (pageTable2 - 1) * resultsPerPage,
-        pageTable2 * resultsPerPage,
-      ),
-    )
-  }, [pageTable2])
+        pageTable2 * resultsPerPage
+      )
+    );
+  }, [pageTable2]);
 
   return (
     <>
@@ -108,7 +104,7 @@ function Participants() {
         </TableFooter>
       </TableContainer>
     </>
-  )
+  );
 }
 
-export default Participants
+export default Participants;
