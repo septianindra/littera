@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import PageTitle from '../components/Typography/PageTitle'
+import React, { useEffect } from "react";
+import PageTitle from "../components/Typography/PageTitle";
 import {
   Input,
   HelperText,
@@ -7,58 +7,60 @@ import {
   Select,
   Textarea,
   Button,
-} from '@windmill/react-ui'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchSchedule } from '../app/schedulesSlice'
-import { fetchProfile } from '../app/profilesSlice'
+} from "@windmill/react-ui";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSchedule } from "../app/schedulesSlice";
+import { fetchProfile } from "../app/profilesSlice";
 import {
   clearCreateParticipantStatus,
   createNewParticipant,
-} from '../app/participantsSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
-import { useForm } from 'react-hook-form'
+} from "../app/participantsSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useForm } from "react-hook-form";
 
 function CreateParticipants() {
-  const dispatch = useDispatch()
-  const schedules = useSelector((state) => state.schedules.scheduleList)
-  const profiles = useSelector((state) => state.profiles.profileList)
+  const dispatch = useDispatch();
+  const schedules = useSelector((state) => state.schedules.scheduleList);
+  const profiles = useSelector((state) => state.profiles.profileList);
 
   const scheduleStatus = useSelector(
-    (state) => state.schedules.scheduleListStatus,
-  )
-  const profileStatus = useSelector((state) => state.profiles.profileListStatus)
+    (state) => state.schedules.scheduleListStatus
+  );
+  const profileStatus = useSelector(
+    (state) => state.profiles.profileListStatus
+  );
   const createParticipantStatus = useSelector(
-    (state) => state.participants.createParticipantStatus,
-  )
-  const canSave = createParticipantStatus === 'idle'
+    (state) => state.participants.createParticipantStatus
+  );
+  const canSave = createParticipantStatus === "idle";
 
-  const { register, handleSubmit } = useForm()
-
-  useEffect(() => {
-    if (scheduleStatus === 'idle') {
-      dispatch(fetchSchedule())
-    }
-  }, [scheduleStatus, dispatch])
+  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    if (profileStatus === 'idle') {
-      dispatch(fetchProfile())
+    if (scheduleStatus === "idle") {
+      dispatch(fetchSchedule());
     }
-  }, [profileStatus, dispatch])
+  }, [scheduleStatus, dispatch]);
+
+  useEffect(() => {
+    if (profileStatus === "idle") {
+      dispatch(fetchProfile());
+    }
+  }, [profileStatus, dispatch]);
 
   const onSubmit = async (data) => {
     if (canSave)
       try {
-        data.status = 'pretest'
-        const resultAction = await dispatch(createNewParticipant(data))
-        unwrapResult(resultAction)
+        data.status = "pretest";
+        const resultAction = await dispatch(createNewParticipant(data));
+        unwrapResult(resultAction);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       } finally {
-        dispatch(clearCreateParticipantStatus())
+        dispatch(clearCreateParticipantStatus());
       }
-  }
+  };
   return (
     <>
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -69,11 +71,11 @@ function CreateParticipants() {
               <Select
                 className="mt-1"
                 defaultValue=""
-                {...register('schedule_id')}
+                {...register("schedule_id")}
               >
                 <option disabled>select option</option>
                 {schedules.map((data) => {
-                  return <option value={data.id}>{data.name}</option>
+                  return <option value={data.id}>{data.name}</option>;
                 })}
               </Select>
             </Label>
@@ -82,11 +84,15 @@ function CreateParticipants() {
               <Select
                 className="mt-1"
                 defaultValue=""
-                {...register('profile_id')}
+                {...register("profile_id")}
               >
                 <option disabled>select option</option>
                 {profiles.map((data) => {
-                  return <option value={data.id}>{data.name} - {data.id}</option>
+                  return (
+                    <option value={data.id}>
+                      {data.name} - {data.id}
+                    </option>
+                  );
                 })}
               </Select>
             </Label>
@@ -101,7 +107,7 @@ function CreateParticipants() {
         </form>
       </div>
     </>
-  )
+  );
 }
 
-export default CreateParticipants
+export default CreateParticipants;

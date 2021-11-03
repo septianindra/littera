@@ -14,6 +14,9 @@ const Profiles = lazy(() => import("../pages/Profiles"));
 const EditProfile = lazy(() => import("../pages/EditProfile"));
 const CreateProfiles = lazy(() => import("../pages/CreateProfiles"));
 const EditQuestions = lazy(() => import("../pages/EditQuestions"));
+const OrganizationList = lazy(() =>
+  import("../pages/Organization/OrganizationList")
+);
 
 const routes = [
   {
@@ -32,12 +35,12 @@ const routes = [
     roles: ["super_admin"],
   },
   {
-    path: "/organizations",
-    component: Organizations,
+    path: "/organization",
+    component: OrganizationList,
     roles: ["super_admin"],
   },
   {
-    path: "/organizations/create-organization",
+    path: "/organization/new",
     component: CreateOrganization,
     roles: ["super_admin"],
   },

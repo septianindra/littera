@@ -62,13 +62,39 @@ export const updateParticipant = createAsyncThunk(
     const { data, error } = await supabase
       .from("participants")
       .update({
-        address: updatedData.address,
-        email: updatedData.email,
-        name: updatedData.name,
-        phone: updatedData.phone,
-        pic_name: updatedData.pic_name,
+        schedule_id: updatedData.schedule_id,
+        profile_id: updatedData.profile_id,
+        status: updatedData.status,
       })
       .eq("id", updatedData.id);
+    // if (error) return error
+    return data;
+  }
+);
+
+export const bannedParticipant = createAsyncThunk(
+  "participants/bannedParticipant",
+  async (updatedData) => {
+    const { data, error } = await supabase
+      .from("participants")
+      .update({
+        status: "banned",
+      })
+      .eq("id", updatedData);
+    // if (error) return error
+    return data;
+  }
+);
+
+export const accParticipant = createAsyncThunk(
+  "participants/accParticipant",
+  async (updatedData) => {
+    const { data, error } = await supabase
+      .from("participants")
+      .update({
+        status: "online",
+      })
+      .eq("id", updatedData);
     // if (error) return error
     return data;
   }
@@ -80,6 +106,9 @@ const participantsSlice = createSlice({
   reducers: {
     clearParticipantByIdData: (state) => {
       state.participantById = [];
+    },
+    clearParticipantListStatus: (state) => {
+      state.participantListStatus = "idle";
     },
     clearParticipantByIdStatus: (state) => {
       state.participantByIdStatus = "idle";
@@ -97,7 +126,7 @@ const participantsSlice = createSlice({
     },
     [fetchParticipant.fulfilled]: (state, action) => {
       state.participantListStatus = "succeeded";
-      state.participantList = state.participantList.concat(action.payload.data);
+      state.participantList = action.payload.data;
     },
     [fetchParticipant.rejected]: (state, action) => {
       state.participantListStatus = "failed";
@@ -161,6 +190,7 @@ export const {
   clearParticipantByIdStatus,
   clearParticipantDeleteStatus,
   clearCreateParticipantStatus,
+  clearParticipantListStatus,
 } = participantsSlice.actions;
 
 export default participantsSlice.reducer;

@@ -20,10 +20,21 @@ import { Link } from "react-router-dom";
 import CreateParticipants from "./CreateParticipants";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteSchedule, fetchSchedule } from "../app/schedulesSlice";
-import { deleteParticipant, fetchParticipant } from "../app/participantsSlice";
+import {
+  accParticipant,
+  bannedParticipant,
+  clearParticipantListStatus,
+  deleteParticipant,
+  fetchParticipant,
+} from "../app/participantsSlice";
+import { CheckmarkIcon } from "react-hot-toast";
+import { useAuth } from "../contexts/Auth";
 // make a copy of the data, for the second table
 
 function Exam() {
+  const { userRole } = useAuth();
+  console.log(userRole);
+  const dispatch = useDispatch();
   const [link, setLink] = useState("schedules");
   const [newPartBox, setNewPartBox] = useState(false);
 
@@ -44,6 +55,30 @@ function Exam() {
     </Button>
   );
 
+  const scheduleList = useSelector((state) => state.schedules.scheduleList);
+  const scheduleListStatus = useSelector(
+    (state) => state.schedules.scheduleListStatus
+  );
+
+  useEffect(() => {
+    if (scheduleListStatus === "idle") {
+      dispatch(fetchSchedule());
+    }
+  }, [scheduleListStatus, dispatch]);
+
+  const participantList = useSelector(
+    (state) => state.participants.participantList
+  );
+  const participantListStatus = useSelector(
+    (state) => state.participants.participantListStatus
+  );
+
+  useEffect(() => {
+    if (participantListStatus === "idle") {
+      dispatch(fetchParticipant());
+    }
+  }, [participantListStatus, dispatch]);
+
   return (
     <>
       <PageTitle>
@@ -63,7 +98,7 @@ function Exam() {
           }}
           className="cursor-pointer"
         >
-          <InfoCard title="Schedule" value="10">
+          <InfoCard title="Schedule" value={scheduleList.length}>
             <RoundIcon
               icon={PeopleIcon}
               iconColorClass="text-blue-500 dark:text-blue-100"
@@ -78,7 +113,7 @@ function Exam() {
           }}
           className="cursor-pointer"
         >
-          <InfoCard title="Participants" value="1000">
+          <InfoCard title="Participants" value={participantList.length}>
             <RoundIcon
               icon={PeopleIcon}
               iconColorClass="text-orange-500 dark:text-orange-100"
@@ -94,30 +129,23 @@ function Exam() {
         {link === "schedules" ? "Schedule list" : "Participant list"}
       </SectionTitle>
 
-      {link === "schedules" ? <ScheduleTable /> : <ParticipantTable />}
+      {link === "schedules" ? (
+        <ScheduleTable response={scheduleList} />
+      ) : (
+        <ParticipantTable response={participantList} />
+      )}
     </>
   );
 }
 
 export default Exam;
 
-function ScheduleTable() {
+function ScheduleTable({ response }) {
   const dispatch = useDispatch();
-  const response = useSelector((state) => state.schedules.scheduleList);
-  const scheduleListStatus = useSelector(
-    (state) => state.schedules.scheduleListStatus
-  );
-
   const [pageTable, setPageTable] = useState(1);
   const [dataTable, setDataTable] = useState([]);
-  const resultsPerPage = 7;
+  const resultsPerPage = 10;
   const totalResults = response.length;
-
-  useEffect(() => {
-    if (scheduleListStatus === "idle") {
-      dispatch(fetchSchedule());
-    }
-  }, [scheduleListStatus, dispatch]);
 
   function onPageChangeTable(p) {
     setPageTable(p);
@@ -210,22 +238,12 @@ function ScheduleTable() {
   );
 }
 
-function ParticipantTable() {
+function ParticipantTable({ response }) {
   const dispatch = useDispatch();
-  const response = useSelector((state) => state.participants.participantList);
-  const participantListStatus = useSelector(
-    (state) => state.participants.participantListStatus
-  );
-
-  useEffect(() => {
-    if (participantListStatus === "idle") {
-      dispatch(fetchParticipant());
-    }
-  }, [participantListStatus, dispatch]);
 
   const [pageTable, setPageTable] = useState(1);
   const [dataTable, setDataTable] = useState([]);
-  const resultsPerPage = 7;
+  const resultsPerPage = 10;
   const totalResults = response.length;
   function onPageChangeTable(p) {
     setPageTable(p);
@@ -277,7 +295,19 @@ function ParticipantTable() {
                   <div className="flex items-center space-x-4">
                     <Button
                       onClick={() => {
-                        alert("user banned !");
+                        dispatch(accParticipant(user.id));
+                        dispatch(clearParticipantListStatus());
+                      }}
+                      layout="link"
+                      size="icon"
+                      aria-label="Edit"
+                    >
+                      <CheckmarkIcon className="w-5 h-5" aria-hidden="true" />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        dispatch(bannedParticipant(user.id));
+                        dispatch(clearParticipantListStatus());
                       }}
                       layout="link"
                       size="icon"
